@@ -2,17 +2,11 @@ import java.util.ArrayList;
 
 public class MazeSolver
 {
-    Vertex Origin;
-    Vertex End;
-    Graph graph;
-
-    //F = G + H
-    //G is previous node + 1
-    //H is gridwidth - 2 squared + gridheight -2 squared etc
 
     Grid grid;
     ArrayList<Cell> openList;
     ArrayList<Cell> closedList;
+
     Cell origin;
     Cell target;
 
@@ -26,6 +20,10 @@ public class MazeSolver
 
     }
 
+    public void restart(){
+        solve(origin,target);
+    }
+
     public void solve(Cell origin, Cell target){
         openList = new ArrayList<>();
         closedList = new ArrayList<>();
@@ -33,7 +31,6 @@ public class MazeSolver
         openList.add(origin);
 
         while (!openList.isEmpty()){
-
 
             Cell currentCell = null;
             int min = Integer.MAX_VALUE;
@@ -47,8 +44,6 @@ public class MazeSolver
             }
 
             openList.remove(currentCell);
-
-
 
             ArrayList<Cell> children = directionsAvailable(currentCell.getX(),currentCell.getY(),currentCell);
             currentCell.children = children;
@@ -97,31 +92,7 @@ public class MazeSolver
                 }
             }
             if(!added) closedList.add(currentCell);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
-
-
-
-
-
-
     }
 
     public ArrayList<Cell> directionsAvailable(int x, int y, Cell parent){
@@ -143,13 +114,7 @@ public class MazeSolver
 
         }
         return children;
-
     }
-
-    //check for node point
-    //only 1 direction
-    //more than 2 directions
-    //so check there are not only 2 directions
 
     public boolean checkUp(int x, int y){
         //if(y == 1) return false;

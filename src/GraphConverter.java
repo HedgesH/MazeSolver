@@ -1,27 +1,20 @@
 import java.sql.Struct;
 import java.util.ArrayList;
-
+//useless class. Original purpose was to convert the maze into a network of nodes at every turning point
 public class GraphConverter
 {
     Grid grid;
 
     Boolean[][] nodes;
     Boolean[][] prevSeen;
-    Graph graph;
     int gridHeight;
     int gridWidth;
     Cell origin;
-    Vertex originVertex;
-    Vertex endVertex;
 
     enum Directions {NORTH,EAST,SOUTH,WEST}
 
-
-
     public GraphConverter(Grid grid){
         this.grid = new Grid(grid);
-
-        this.graph = new Graph();
 
         nodes = new Boolean[grid.getGridWidth()][grid.getGridHeight()];
         prevSeen = new Boolean[grid.getGridWidth()][grid.getGridHeight()];
@@ -38,11 +31,7 @@ public class GraphConverter
         this.origin = grid.getCell(1,1);
         nodes[1][1] = true;
 
-        originVertex = new Vertex(this.origin);
-        graph.addVertex(originVertex);
-
         convert();
-        findChildren(originVertex,originVertex);
         prevSeenRemover();
 
 
@@ -73,34 +62,6 @@ public class GraphConverter
 
             }
         }
-    }
-
-    public void findChildren(Vertex parent,Vertex newCell){
-        Vertex currentParent = parent;
-        int x = newCell.label.getX();
-        int y = newCell.label.getY();
-//        System.out.println(x + " " + y);
-//        System.out.println(" PARENT: " + parent.label.getX() + " " + parent.label.getY());
-        if(isNode(x,y) && parent != newCell){
-            graph.addVertex(newCell);
-            graph.addVertex(parent);
-
-            graph.addEdge(parent,newCell);
-            if(newCell.label.getX() == gridWidth - 1 && newCell.label.getY() == gridHeight - 1) endVertex = newCell;
-            currentParent = newCell;
-        }
-        prevSeen[x][y] = true;
-        newCell.label.setAlive(true);
-        ArrayList<Directions> dir = directionsAvailable(x,y);
-        if(dir.isEmpty()) return;
-
-        for (Directions d:dir) {
-            if(d == Directions.NORTH) findChildren(currentParent, new Vertex(grid.getCell(x,y-1)));
-            if(d == Directions.EAST) findChildren(currentParent, new Vertex(grid.getCell(x+1,y)) );
-            if(d == Directions.SOUTH) findChildren(currentParent, new Vertex(grid.getCell(x,y+1)) );
-            if(d == Directions.WEST) findChildren(currentParent,new Vertex(grid.getCell(x-1,y)) );
-        }
-
     }
 
     public ArrayList<Directions> directionsAvailable(int x, int y){

@@ -19,12 +19,16 @@ public class MazeGenerator {
         walls = new ArrayList<>();
         random = new Random(System.currentTimeMillis());
         generate(1,1);
-
-
     }
 
+    //getter for the maze grid
     public Grid generatedGrid(){return grid;}
 
+    public void restart(){
+        random.nextInt();
+        generate(1,1);}
+
+    //generate the maze using recursion
     public void generate(int x, int y)
     {
         grid.getCell(x,y).setAlive(false);
@@ -39,6 +43,7 @@ public class MazeGenerator {
 
     }
 
+    //every other row/col is a wall work out which directions are free from the current cell
     public ArrayList<Directions> directionsAvailable(int x, int y){
         ArrayList<Directions> directions = new ArrayList<>();
         if(checkUp(x,y)) directions.add(Directions.NORTH);
